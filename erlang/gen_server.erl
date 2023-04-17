@@ -11,13 +11,15 @@
 % other exports
 -export([send/1]).
 
+-define(SERVER, ?MODULE).
+
 -record(state, {
 	limit = 0 :: non_neg_integer()
 }).
 
 % gen_server helpers
 start_link() ->
-	gen_server:start_link(?MODULE, ["arg"], []).
+	gen_server:start_link({local, ?SERVER}, ?MODULE, ["arg"], []).
 
 stop() ->
 	ok.
@@ -44,7 +46,7 @@ handle_info(_Message, _Server) ->
 
 % exported module methods
 send(Command) ->
-	gen_server:call({command, Command}).
+	gen_server:call(?SERVER, {command, Command}).
 
 
 % other internal methods
