@@ -5,6 +5,7 @@
 -behaviour(gen_server).
 
 % gen_server exports
+-export([start_link/0, stop/0]).
 -export([init/1, code_change/3, terminate/2, handle_call/3, handle_cast/2, handle_info/2]).
 
 % other exports
@@ -14,8 +15,15 @@
 	limit = 0 :: non_neg_integer()
 }).
 
-% gen_server handlers
-init(_) ->
+% gen_server helpers
+start_link() ->
+	gen_server:start_link(?MODULE, ["arg"], []).
+
+stop() ->
+	ok.
+
+% gen_server callbacks
+init([_Arg]) ->
 	{ok, #state{}}.
 
 code_change(_OldVsn, State, _Extra) ->
